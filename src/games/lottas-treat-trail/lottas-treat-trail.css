@@ -1,0 +1,259 @@
+/* Lotta's Treat Trail – nur Styles dieses Spiels (Präfix tt-) */
+
+/* ---------- Status ---------- */
+.tt-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-s);
+  border: 2px solid var(--color-line);
+  background: var(--color-paper);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.tt-status__icon {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.tt-status__icon svg,
+.tt-treat svg,
+.tt-cell svg,
+.tt-lotta svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tt-dots {
+  display: flex;
+  gap: 5px;
+}
+
+.tt-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--color-teal-dark);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.tt-dot.is-full {
+  background: var(--color-teal);
+  transform: scale(1.15);
+}
+
+.tt-count {
+  margin-left: auto;
+  color: var(--color-ink-soft);
+  text-align: right;
+}
+
+/* ---------- Spielfeld ---------- */
+.tt-field {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: var(--space-2);
+  border-radius: var(--radius-m);
+  border: 3px solid var(--color-gold-dark);
+  background: #cfe6b0;
+  box-shadow: var(--shadow-card);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+.tt-message {
+  position: absolute;
+  top: var(--space-2);
+  left: 50%;
+  z-index: 5;
+  width: max-content;
+  max-width: 90%;
+  padding: var(--space-2) var(--space-4);
+  border-radius: 999px;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: center;
+  transform: translateX(-50%);
+  animation: pop-in 0.25s ease-out both;
+}
+
+.tt-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(7, var(--tt-cell));
+  grid-auto-rows: var(--tt-cell);
+  width: calc(var(--tt-cell) * 7);
+  border-radius: var(--radius-s);
+  overflow: hidden;
+}
+
+.tt-cell {
+  position: relative;
+  width: var(--tt-cell);
+  height: var(--tt-cell);
+  padding: 2px;
+}
+
+/* Weg = sandfarben, alles andere = Wiese */
+.tt-cell--path {
+  background: #f3e3b8;
+  box-shadow: inset 0 0 0 1px rgba(184, 138, 85, 0.25);
+}
+
+.tt-cell--tree,
+.tt-cell--bush,
+.tt-cell--pond {
+  background: #cfe6b0;
+}
+
+.tt-cell--pond {
+  background: #bfe0d0;
+}
+
+.tt-cell--finish {
+  background: #ffe9a8;
+}
+
+.tt-flag {
+  position: absolute;
+  inset: 2px;
+}
+
+/* ---------- Knochen ---------- */
+.tt-treat {
+  position: absolute;
+  inset: 6px;
+  animation: tt-wiggle 1.6s ease-in-out infinite;
+}
+
+.tt-treat--got {
+  animation: tt-got 0.35s ease-out forwards;
+}
+
+/* ---------- Lotta ---------- */
+.tt-lotta {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  width: var(--tt-cell);
+  height: var(--tt-cell);
+  padding: 1px;
+  pointer-events: none;
+  transition: transform 0.15s linear;
+  will-change: transform;
+}
+
+.tt-lotta svg {
+  filter: drop-shadow(0 2px 0 rgba(59, 42, 32, 0.25));
+}
+
+.tt-lotta--bump svg {
+  animation: tt-bump 0.35s ease-out;
+}
+
+.tt-lotta--cheer svg {
+  animation: tt-cheer 0.8s ease-in-out;
+}
+
+/* ---------- Hinweis-Weg ---------- */
+.tt-cell--hint.tt-cell--path::after,
+.tt-cell--hint.tt-cell--finish::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 34%;
+  height: 34%;
+  border-radius: 50%;
+  background: var(--color-gold-dark);
+  box-shadow: 0 0 0 3px rgba(240, 180, 41, 0.6);
+  transform: translate(-50%, -50%);
+  animation: tt-dot 0.8s ease-in-out infinite alternate;
+  z-index: 1;
+}
+
+/* ---------- Steuerung ---------- */
+.tt-pad {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+}
+
+.tt-pad__button {
+  min-height: 54px;
+  padding-inline: 0;
+  font-size: 1.3rem;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+@keyframes tt-wiggle {
+  0%,
+  100% {
+    transform: rotate(-6deg) scale(1);
+  }
+  50% {
+    transform: rotate(6deg) scale(1.08);
+  }
+}
+
+@keyframes tt-got {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-14px) scale(1.7);
+    opacity: 0;
+  }
+}
+
+@keyframes tt-bump {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px) rotate(-6deg);
+  }
+  50% {
+    transform: translateX(5px) rotate(6deg);
+  }
+  75% {
+    transform: translateX(-3px);
+  }
+}
+
+@keyframes tt-cheer {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+  25% {
+    transform: translateY(-10px) rotate(-8deg);
+  }
+  75% {
+    transform: translateY(-10px) rotate(8deg);
+  }
+}
+
+@keyframes tt-dot {
+  from {
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+}

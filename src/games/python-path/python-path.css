@@ -1,0 +1,318 @@
+/* Python-Snake – nur Styles dieses Spiels (Präfix ps-) */
+
+/* ---------- Code-Panel ---------- */
+.ps-code {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-m);
+  background: #1f2a3a;
+  color: #e8eef6;
+  box-shadow: var(--shadow-card);
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+}
+
+.ps-code__tab {
+  align-self: flex-start;
+  padding: 2px var(--space-3);
+  border-radius: 8px 8px 0 0;
+  background: #3776ab;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.ps-code__line {
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.ps-code__line b {
+  color: #ffd43b;
+}
+
+.ps-kw {
+  color: #8fd0f0;
+}
+
+.ps-terms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ps-term {
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 2px solid rgba(232, 238, 246, 0.35);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #c9d6e6;
+}
+
+.ps-term.is-next {
+  border-color: #ffd43b;
+  color: #ffd43b;
+}
+
+.ps-term.is-done {
+  border-color: #6fd39a;
+  background: rgba(111, 211, 154, 0.2);
+  color: #6fd39a;
+  text-decoration: line-through;
+}
+
+.ps-term.is-done::before {
+  content: '✓ ';
+  text-decoration: none;
+  display: inline-block;
+}
+
+/* ---------- Spielfeld ---------- */
+.ps-field {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: var(--space-2);
+  border-radius: var(--radius-m);
+  border: 3px solid #3776ab;
+  background: #243447;
+  box-shadow: var(--shadow-card);
+  touch-action: none; /* Wischen im Feld darf die Seite nicht scrollen */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.ps-message {
+  position: absolute;
+  top: var(--space-2);
+  left: 50%;
+  z-index: 6;
+  width: max-content;
+  max-width: 90%;
+  padding: var(--space-2) var(--space-4);
+  border-radius: 999px;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-size: 0.88rem;
+  font-weight: 800;
+  text-align: center;
+  transform: translateX(-50%);
+  animation: pop-in 0.25s ease-out both;
+}
+
+.ps-start {
+  position: absolute;
+  left: 50%;
+  bottom: var(--space-4);
+  z-index: 5;
+  margin: 0;
+  padding: var(--space-2) var(--space-4);
+  border-radius: 999px;
+  background: rgba(255, 212, 59, 0.95);
+  color: #1f2a3a;
+  font-weight: 800;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  animation: ps-pulse 1.4s ease-in-out infinite;
+}
+
+.ps-grid {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-s);
+  background-color: #2b3d52;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: var(--ps-cell) var(--ps-cell);
+}
+
+/* ---------- Schlange ---------- */
+.ps-snake,
+.ps-dots {
+  position: absolute;
+  inset: 0;
+}
+
+.ps-snake {
+  z-index: 3;
+}
+
+.ps-seg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--ps-cell);
+  height: var(--ps-cell);
+  padding: 2px;
+  will-change: transform;
+}
+
+.ps-seg::before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+
+.ps-seg--a::before {
+  background: #3776ab;
+}
+
+.ps-seg--b::before {
+  background: #4b8bbe;
+}
+
+.ps-seg--tail::before {
+  background: #ffd43b;
+  border-radius: 8px 4px 4px 8px;
+}
+
+.ps-seg--head {
+  padding: 0;
+  z-index: 2;
+}
+
+.ps-seg--head::before {
+  content: none;
+}
+
+.ps-seg--head svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ps-seg--lost::before,
+.ps-seg--lost svg {
+  opacity: 0.45;
+  filter: grayscale(0.8);
+}
+
+.ps-seg--cheer {
+  animation: ps-cheer 0.5s ease-in-out 2;
+}
+
+/* ---------- Begriff (Futter) ---------- */
+.ps-food {
+  position: absolute;
+  z-index: 2;
+  width: max-content;
+  transform: translate(calc(-50% + var(--ps-shift, 0px)), -50%);
+  pointer-events: none;
+}
+
+.ps-food__label {
+  display: block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #ffd43b;
+  border: 2px solid #b8920a;
+  color: #1f2a3a;
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.2;
+  box-shadow: 0 0 0 3px rgba(255, 212, 59, 0.25);
+  animation: ps-pop 0.3s ease-out both, ps-pulse 1.4s ease-in-out 0.3s infinite;
+}
+
+.ps-food--hint .ps-food__label {
+  box-shadow:
+    0 0 0 4px #fff,
+    0 0 14px 4px rgba(255, 212, 59, 0.9);
+}
+
+.ps-dots {
+  z-index: 1;
+}
+
+.ps-dot {
+  position: absolute;
+  width: var(--ps-cell);
+  height: var(--ps-cell);
+}
+
+.ps-dot::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 28%;
+  height: 28%;
+  border-radius: 50%;
+  background: #ffd43b;
+  opacity: 0.85;
+  transform: translate(-50%, -50%);
+}
+
+/* ---------- Steuerung ---------- */
+.ps-pad {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+}
+
+.ps-pad__button {
+  min-height: 54px;
+  padding-inline: 0;
+  font-size: 1.3rem;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+@keyframes ps-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+/* .ps-start liegt per translateX mittig → eigener Puls, damit die Position stimmt */
+.ps-start {
+  animation-name: ps-start-pulse;
+}
+
+@keyframes ps-start-pulse {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.06);
+  }
+}
+
+@keyframes ps-pop {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes ps-cheer {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.6);
+  }
+}

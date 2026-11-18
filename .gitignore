@@ -1,0 +1,36 @@
+# --- Private Quelldateien: NIEMALS ins öffentliche Repository ---
+# Die Excel-Übergabedatei enthält Kontext, Planung und die Originalnachrichten.
+Lucas_Farewell_App_Handoff.xlsx
+*.xlsx
+*.xls
+*.xlsm
+~$*
+
+# --- Build & Abhängigkeiten ---
+node_modules/
+dist/
+dist-ssr/
+*.local
+.vite/
+
+# --- Logs ---
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- Umgebungsdateien ---
+.env
+.env.*
+!.env.example
+
+# --- Editor / Betriebssystem ---
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Claude Code (lokale Einstellungen) ---
+.claude/settings.local.json

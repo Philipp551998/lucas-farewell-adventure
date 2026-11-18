@@ -1,0 +1,305 @@
+/* Wedding Catch – nur Styles dieses Spiels (Präfix wc-) */
+
+/* ---------- Ziele ---------- */
+.wc-goals {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+
+.wc-goal {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 48px;
+  padding: 4px var(--space-3);
+  border-radius: var(--radius-s);
+  border: 2px solid var(--color-line);
+  background: var(--color-paper);
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.wc-goal__icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.wc-goal__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.wc-goal__marks {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.wc-mark {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--color-teal-dark);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.wc-mark.is-full {
+  background: var(--color-teal);
+  transform: scale(1.15);
+}
+
+/* ---------- Zeit ---------- */
+.wc-timer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 0.85rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink-soft);
+}
+
+.wc-timer__track {
+  flex: 1;
+  height: 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--color-paper);
+  border: 2px solid var(--color-line);
+}
+
+.wc-timer__bar {
+  width: 100%;
+  height: 100%;
+  background: var(--color-teal);
+  transform-origin: left center;
+}
+
+.wc-timer__bar.is-low {
+  background: var(--color-terracotta);
+}
+
+.wc-timer__text {
+  min-width: 2.6rem;
+  text-align: right;
+}
+
+/* ---------- Spielfeld ---------- */
+.wc-field {
+  position: relative;
+  height: clamp(300px, 44dvh, 420px);
+  overflow: hidden;
+  border-radius: var(--radius-m);
+  border: 3px solid var(--color-gold-dark);
+  background:
+    radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.7), transparent 40%),
+    linear-gradient(to bottom, #fde7ef 0%, #fff4e0 70%, #f5e2b8 100%);
+  box-shadow: var(--shadow-card);
+  touch-action: none; /* Ziehen im Feld darf die Seite nicht scrollen */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.wc-field--oops {
+  animation: wc-flash 0.38s ease-out;
+}
+
+.wc-message {
+  position: absolute;
+  top: var(--space-3);
+  left: 50%;
+  z-index: 4;
+  width: max-content;
+  max-width: 88%;
+  padding: var(--space-2) var(--space-4);
+  border-radius: 999px;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: center;
+  transform: translateX(-50%);
+  animation: pop-in 0.25s ease-out both;
+}
+
+/* ---------- Korb ---------- */
+.wc-basket {
+  position: absolute;
+  left: 0;
+  bottom: 6px;
+  z-index: 3;
+  width: 92px;
+  height: 62px;
+  will-change: transform;
+  pointer-events: none;
+}
+
+.wc-basket svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 100%;
+}
+
+.wc-basket--bounce svg {
+  animation: wc-bounce 0.3s ease-out;
+}
+
+.wc-basket--cheer svg {
+  animation: wc-cheer 0.7s ease-in-out;
+}
+
+/* ---------- Items ---------- */
+.wc-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 56px;
+  height: 56px;
+  will-change: transform;
+  pointer-events: none;
+}
+
+.wc-item__body,
+.wc-item__art {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.wc-item__art {
+  padding: 4px;
+  border-radius: 50%;
+  background: rgba(255, 250, 240, 0.92);
+  border: 2px solid rgba(59, 42, 32, 0.22);
+  box-shadow: 0 3px 0 rgba(59, 42, 32, 0.16);
+}
+
+.wc-item__art svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.wc-item--got .wc-item__body {
+  animation: wc-got 0.3s ease-in forwards;
+}
+
+.wc-item--got .wc-item__art {
+  border-color: var(--color-teal);
+  background: #dff3ec;
+}
+
+.wc-item--oops .wc-item__body {
+  animation: wc-oops 0.42s ease-out forwards;
+}
+
+.wc-item--oops .wc-item__art {
+  border-color: var(--color-terracotta);
+  background: #fbdccf;
+}
+
+/* Hinweis: Strauß und Ringe leuchten */
+.wc-field--hint .wc-item[data-needed='true'] .wc-item__art {
+  border-color: var(--color-gold-dark);
+  box-shadow:
+    0 0 0 4px var(--color-gold),
+    0 0 18px 4px rgba(240, 180, 41, 0.8);
+  animation: wc-glow 0.7s ease-in-out infinite alternate;
+}
+
+/* ---------- Steuerung ---------- */
+.wc-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.wc-step {
+  min-height: 56px;
+  font-size: 1.4rem;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+@keyframes wc-got {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(18px) scale(0.35);
+    opacity: 0;
+  }
+}
+
+@keyframes wc-oops {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-7px) rotate(-6deg);
+  }
+  40% {
+    transform: translateX(7px) rotate(6deg);
+  }
+  60% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0) scale(0.6);
+    opacity: 0;
+  }
+}
+
+@keyframes wc-bounce {
+  0% {
+    transform: scale(1, 1);
+  }
+  40% {
+    transform: scale(1.1, 0.88);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+@keyframes wc-cheer {
+  0%,
+  100% {
+    transform: rotate(0) translateY(0);
+  }
+  25% {
+    transform: rotate(-8deg) translateY(-8px);
+  }
+  75% {
+    transform: rotate(8deg) translateY(-8px);
+  }
+}
+
+@keyframes wc-flash {
+  0% {
+    box-shadow: inset 0 0 0 0 rgba(194, 81, 42, 0), var(--shadow-card);
+  }
+  30% {
+    box-shadow: inset 0 0 40px 8px rgba(194, 81, 42, 0.45), var(--shadow-card);
+  }
+  100% {
+    box-shadow: inset 0 0 0 0 rgba(194, 81, 42, 0), var(--shadow-card);
+  }
+}
+
+@keyframes wc-glow {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}

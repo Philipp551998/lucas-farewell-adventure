@@ -1,0 +1,294 @@
+/* Portugal Swipe Challenge – nur Styles dieses Spiels (Präfix pt-) */
+
+/* ---------- Legende ---------- */
+.pt-legend {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.pt-legend__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px var(--space-2);
+  padding: 6px var(--space-3);
+  border-radius: var(--radius-s);
+  border: 2px solid var(--color-line);
+  background: var(--color-paper);
+}
+
+.pt-legend__row--good {
+  border-color: rgba(47, 143, 131, 0.55);
+}
+
+.pt-legend__row--bad {
+  border-color: rgba(194, 81, 42, 0.5);
+}
+
+.pt-legend__title {
+  min-width: 4.4rem;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pt-legend__row--good .pt-legend__title {
+  color: var(--color-teal-dark);
+}
+
+.pt-legend__row--bad .pt-legend__title {
+  color: var(--color-terracotta-dark);
+}
+
+.pt-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.pt-chip__icon {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+}
+
+.pt-chip__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- Status ---------- */
+.pt-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.pt-progress {
+  display: flex;
+  gap: 4px;
+}
+
+.pt-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--color-teal-dark);
+  background: transparent;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.pt-dot.is-full {
+  background: var(--color-teal);
+  transform: scale(1.15);
+}
+
+.pt-count {
+  color: var(--color-ink-soft);
+  white-space: nowrap;
+}
+
+.pt-slips {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-ink-soft);
+}
+
+.pt-slips__label {
+  margin-right: 2px;
+}
+
+.pt-pip {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--color-terracotta);
+  font-size: 0.65rem;
+  line-height: 1;
+  color: #fff;
+}
+
+.pt-pip.is-used {
+  background: var(--color-terracotta);
+}
+
+.pt-pip.is-used::before {
+  content: '✕';
+}
+
+/* ---------- Spielfeld ---------- */
+.pt-field {
+  position: relative;
+  height: clamp(320px, 48dvh, 460px);
+  overflow: hidden;
+  border-radius: var(--radius-m);
+  border: 3px solid var(--color-gold-dark);
+  background: linear-gradient(to bottom, #bfe3f2 0%, #e6f3e6 62%, #f3dfa8 100%);
+  box-shadow: var(--shadow-card);
+  touch-action: none; /* Wischen im Feld darf die Seite nicht scrollen */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.pt-field--oops {
+  animation: pt-flash 0.38s ease-out;
+}
+
+.pt-message {
+  position: absolute;
+  top: var(--space-3);
+  left: 50%;
+  z-index: 3;
+  width: max-content;
+  max-width: 88%;
+  padding: var(--space-2) var(--space-4);
+  border-radius: 999px;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: center;
+  transform: translateX(-50%);
+  animation: pop-in 0.25s ease-out both;
+}
+
+/* ---------- Motive ---------- */
+.pt-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 76px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--color-ink);
+  cursor: pointer;
+  will-change: transform;
+  touch-action: none;
+}
+
+.pt-item__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.pt-item__art {
+  display: block;
+  width: 56px;
+  height: 56px;
+  padding: 4px;
+  border-radius: 50%;
+  background: rgba(255, 250, 240, 0.92);
+  border: 2px solid rgba(59, 42, 32, 0.25);
+  box-shadow: 0 3px 0 rgba(59, 42, 32, 0.18);
+}
+
+.pt-item__art svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.pt-item__label {
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(255, 250, 240, 0.92);
+  font-size: 0.66rem;
+  font-weight: 800;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.pt-item--got .pt-item__body {
+  animation: pt-got 0.28s ease-out forwards;
+}
+
+.pt-item--got .pt-item__art {
+  border-color: var(--color-teal);
+  background: #dff3ec;
+}
+
+.pt-item--oops .pt-item__body {
+  animation: pt-oops 0.42s ease-out forwards;
+}
+
+.pt-item--oops .pt-item__art {
+  border-color: var(--color-terracotta);
+  background: #fbdccf;
+}
+
+/* Hinweis: portugiesische Motive leuchten */
+.pt-field--hint .pt-item[data-portuguese='true'] .pt-item__art {
+  border-color: var(--color-gold-dark);
+  box-shadow:
+    0 0 0 4px var(--color-gold),
+    0 0 18px 4px rgba(240, 180, 41, 0.8);
+  animation: pt-glow 0.7s ease-in-out infinite alternate;
+}
+
+@keyframes pt-got {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes pt-oops {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-7px) rotate(-6deg);
+  }
+  40% {
+    transform: translateX(7px) rotate(6deg);
+  }
+  60% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0) scale(0.6);
+    opacity: 0;
+  }
+}
+
+@keyframes pt-flash {
+  0% {
+    box-shadow: inset 0 0 0 0 rgba(194, 81, 42, 0), var(--shadow-card);
+  }
+  30% {
+    box-shadow: inset 0 0 40px 8px rgba(194, 81, 42, 0.45), var(--shadow-card);
+  }
+  100% {
+    box-shadow: inset 0 0 0 0 rgba(194, 81, 42, 0), var(--shadow-card);
+  }
+}
+
+@keyframes pt-glow {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}

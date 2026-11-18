@@ -1,0 +1,46 @@
+/* Design-Tokens: Farben, Abstände, Schriften. Hier ändern, nicht in den Komponenten. */
+:root {
+  /* Warme Pergament-Palette */
+  --color-parchment: #fbf1dc;
+  --color-parchment-deep: #f1dcb0;
+  --color-paper: #fffaf0;
+  --color-ink: #3b2a20;
+  --color-ink-soft: #6b5546;
+  --color-terracotta: #c2512a; /* Weißer Text darauf: Kontrast ≈ 4.7:1 */
+  --color-terracotta-dark: #9f3f1d;
+  --color-teal: #2f8f83;
+  --color-teal-dark: #1f6b61;
+  --color-gold: #f0b429;
+  --color-gold-dark: #b9820a;
+  --color-leaf: #6fa86b;
+  --color-sky: #cfe8ef;
+  --color-locked: #cdbfa8;
+  --color-line: rgba(59, 42, 32, 0.14);
+
+  /* Formen */
+  --radius-s: 12px;
+  --radius-m: 20px;
+  --radius-l: 28px;
+  --shadow-card: 0 2px 0 rgba(59, 42, 32, 0.08), 0 14px 28px -16px rgba(59, 42, 32, 0.45);
+
+  /* Abstände */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  /* Bedienung */
+  --tap-size: 48px; /* mind. 44px (Apple) / 48px (Material) */
+
+  /* iPhone-Safe-Areas (Notch, Home-Indikator) */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+
+  /* Schriften – nur Systemschriften: schnell, offline, keine externen Anfragen */
+  --font-body: ui-rounded, 'SF Pro Rounded', 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+}

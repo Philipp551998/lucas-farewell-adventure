@@ -1,0 +1,248 @@
+/* Italian Starter Quiz – nur Styles dieses Spiels (Präfix it-) */
+
+.it {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* ---------- App-Leiste ---------- */
+.it-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-m);
+  background: #2c4a3f;
+  color: #fff;
+  box-shadow: var(--shadow-card);
+}
+
+.it-bar__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.it-bar__logo {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  background: linear-gradient(to right, #2f9e57 0 33.3%, #fffdf8 33.3% 66.6%, #d8412f 66.6% 100%);
+}
+
+.it-bar__name {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.it-bar__lesson {
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+.it-progress {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+.it-segment {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  transition: background-color 0.2s ease;
+}
+
+.it-segment--current {
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.it-segment--right {
+  background: #6fd39a;
+}
+
+.it-segment--wrong {
+  background: #f08a6e;
+}
+
+/* ---------- Frage ---------- */
+.it-card {
+  gap: var(--space-4);
+}
+
+.it-word {
+  font-size: 2.4rem;
+  text-align: center;
+  color: #2c4a3f;
+}
+
+.it-answers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.it-answer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 58px;
+  padding: var(--space-2) var(--space-4);
+  border: 2px solid var(--color-line);
+  border-radius: var(--radius-m);
+  background: #fff;
+  color: var(--color-ink);
+  font: inherit;
+  font-weight: 800;
+  font-size: 1.05rem;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 3px 0 rgba(59, 42, 32, 0.12);
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
+}
+
+.it-answer:not(:disabled):active {
+  transform: scale(0.98);
+}
+
+.it-answer:disabled {
+  cursor: default;
+}
+
+.it-answer__letter {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #e1ece6;
+  font-size: 0.9rem;
+}
+
+.it-answer__text {
+  flex: 1;
+}
+
+.it-answer__note {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-ink-soft);
+}
+
+.it-answer.is-right {
+  background: #dff3ec;
+  border-color: var(--color-teal);
+}
+
+.it-answer.is-wrong {
+  background: #fbdccf;
+  border-color: var(--color-terracotta);
+  animation: it-shake 0.4s ease-out;
+}
+
+.it-answer.is-right .it-answer__letter,
+.it-answer.is-wrong .it-answer__letter {
+  color: #fff;
+  font-size: 0;
+}
+
+.it-answer.is-right .it-answer__letter {
+  background: var(--color-teal);
+}
+
+.it-answer.is-wrong .it-answer__letter {
+  background: var(--color-terracotta);
+}
+
+.it-answer.is-right .it-answer__letter::before {
+  content: '✓';
+  font-size: 1rem;
+}
+
+.it-answer.is-wrong .it-answer__letter::before {
+  content: '✕';
+  font-size: 1rem;
+}
+
+.it-answer.is-dim,
+.it-answer.is-eliminated {
+  opacity: 0.5;
+}
+
+.it-answer.is-eliminated .it-answer__text {
+  text-decoration: line-through;
+}
+
+/* ---------- Rückmeldung (wie in Lern-Apps unten eingeblendet) ---------- */
+.it-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-m);
+  animation: pop-in 0.25s ease-out both;
+}
+
+.it-sheet--right {
+  background: #dff3ec;
+  border: 2px solid var(--color-teal);
+  color: var(--color-teal-dark);
+}
+
+.it-sheet--wrong {
+  background: #fbdccf;
+  border: 2px solid var(--color-terracotta);
+  color: var(--color-terracotta-dark);
+}
+
+.it-sheet__title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.it-sheet__detail {
+  font-weight: 700;
+}
+
+.it-next {
+  width: 100%;
+  margin-top: var(--space-1);
+}
+
+/* ---------- Ergebnis ---------- */
+.it-result__icon {
+  font-size: 3.5rem;
+  line-height: 1;
+}
+
+.it-result__text {
+  font-weight: 800;
+  font-size: 1.15rem;
+}
+
+.it-result--passed .it-result__icon {
+  animation: bounce 0.9s ease-out both;
+}
+
+@keyframes it-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
+}

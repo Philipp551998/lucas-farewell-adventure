@@ -1,0 +1,197 @@
+/* Erlangen Quiz – nur Styles dieses Spiels (Präfix eq-) */
+
+.eq {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* ---------- Fortschritt ---------- */
+.eq-progress {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.eq-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--color-ink-soft);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.eq-dot--current {
+  border-color: var(--color-terracotta);
+  transform: scale(1.25);
+}
+
+.eq-dot--right {
+  background: var(--color-teal);
+  border-color: var(--color-teal);
+}
+
+.eq-dot--wrong {
+  background: var(--color-terracotta);
+  border-color: var(--color-terracotta);
+}
+
+/* ---------- Frage ---------- */
+.eq-card {
+  gap: var(--space-4);
+}
+
+.eq-question {
+  font-size: 1.35rem;
+  outline: none;
+}
+
+.eq-answers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* ---------- Antworten ---------- */
+.eq-answer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 58px;
+  padding: var(--space-2) var(--space-4);
+  border: 2px solid var(--color-line);
+  border-radius: var(--radius-m);
+  background: #fff;
+  color: var(--color-ink);
+  font: inherit;
+  font-weight: 800;
+  font-size: 1.05rem;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 3px 0 rgba(59, 42, 32, 0.12);
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
+}
+
+.eq-answer:not(:disabled):active {
+  transform: scale(0.98);
+}
+
+.eq-answer__letter {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--color-parchment-deep);
+  font-size: 0.9rem;
+}
+
+.eq-answer__text {
+  flex: 1;
+}
+
+.eq-answer__note {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-ink-soft);
+}
+
+.eq-answer:disabled {
+  cursor: default;
+}
+
+.eq-answer.is-right {
+  background: #dff3ec;
+  border-color: var(--color-teal);
+}
+
+.eq-answer.is-right .eq-answer__letter::before {
+  content: '✓';
+}
+
+.eq-answer.is-right .eq-answer__letter {
+  background: var(--color-teal);
+  color: #fff;
+  font-size: 0;
+}
+
+.eq-answer.is-right .eq-answer__letter::before,
+.eq-answer.is-wrong .eq-answer__letter::before {
+  font-size: 1rem;
+}
+
+.eq-answer.is-wrong {
+  background: #fbdccf;
+  border-color: var(--color-terracotta);
+  animation: eq-shake 0.4s ease-out;
+}
+
+.eq-answer.is-wrong .eq-answer__letter {
+  background: var(--color-terracotta);
+  color: #fff;
+  font-size: 0;
+}
+
+.eq-answer.is-wrong .eq-answer__letter::before {
+  content: '✕';
+}
+
+.eq-answer.is-dim,
+.eq-answer.is-eliminated {
+  opacity: 0.5;
+}
+
+.eq-answer.is-eliminated .eq-answer__text {
+  text-decoration: line-through;
+}
+
+/* ---------- Rückmeldung ---------- */
+.eq-feedback {
+  min-height: 1.5em;
+  font-weight: 800;
+  text-align: center;
+}
+
+.eq-feedback--right {
+  color: var(--color-teal-dark);
+}
+
+.eq-feedback--wrong {
+  color: var(--color-terracotta-dark);
+}
+
+.eq-next {
+  width: 100%;
+}
+
+/* ---------- Ergebnis ---------- */
+.eq-result__icon {
+  font-size: 3.5rem;
+  line-height: 1;
+}
+
+.eq-result__text {
+  font-weight: 800;
+  font-size: 1.15rem;
+}
+
+.eq-result--passed .eq-result__icon {
+  animation: bounce 0.9s ease-out both;
+}
+
+@keyframes eq-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
+}

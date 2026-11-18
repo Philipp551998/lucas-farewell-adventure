@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Lucas Farewell Adventure</title>
+    <meta
+      name="description"
+      content="A little adventure with eight mini-games and eight messages, made for Lucas."
+    />
+
+    <!-- PWA -->
+    <meta name="theme-color" content="#fbf1dc" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Lucas Adventure" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <!-- Verhindert weißes Aufblitzen vor dem Laden der Styles -->
+    <style>
+      html,
+      body {
+        margin: 0;
+        background: #fbf1dc;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <noscript>
+      <p style="font-family: sans-serif; padding: 24px">
+        This little adventure needs JavaScript. Please turn it on and reload.
+      </p>
+    </noscript>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

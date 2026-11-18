@@ -1,0 +1,335 @@
+/* Recipe Rush – nur Styles dieses Spiels (Präfix rr-) */
+
+/* ---------- Rezeptkarte ---------- */
+.rr-recipe {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-m);
+  background: var(--color-paper);
+  border: 2px solid var(--color-line);
+  border-left: 6px solid var(--color-terracotta);
+  box-shadow: var(--shadow-card);
+}
+
+.rr-recipe__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.rr-recipe__head h2 {
+  font-size: 1.35rem;
+}
+
+.rr-slots {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rr-slot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 40px;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-s);
+  border: 2px dashed var(--color-line);
+  font-weight: 800;
+  font-size: 0.92rem;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.rr-slot__icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid var(--color-line);
+  color: var(--color-ink-soft);
+}
+
+.rr-slot__icon::before {
+  content: '?';
+  font-size: 0.85rem;
+}
+
+.rr-slot.is-done .rr-slot__icon::before {
+  content: none;
+}
+
+.rr-slot__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.rr-slot.is-done {
+  border-style: solid;
+  border-color: var(--color-teal);
+  background: #e3f4ee;
+}
+
+.rr-slot.is-done .rr-slot__name::after {
+  content: ' ✓';
+  color: var(--color-teal-dark);
+}
+
+.rr-recipe__note {
+  font-size: 0.8rem;
+  color: var(--color-ink-soft);
+}
+
+/* ---------- Schüssel ---------- */
+.rr-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.rr-bowl {
+  position: relative;
+  width: min(210px, 62%);
+  height: 108px;
+  margin-top: var(--space-2);
+  border: 5px solid #8c5a34;
+  border-top-width: 0;
+  border-radius: 0 0 110px 110px;
+  background: #e9d3b0;
+  box-shadow: 0 6px 0 rgba(59, 42, 32, 0.2);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Schüsselrand */
+.rr-bowl::before {
+  content: '';
+  position: absolute;
+  top: -11px;
+  left: -10px;
+  right: -10px;
+  height: 22px;
+  border-radius: 50%;
+  border: 5px solid #8c5a34;
+  background: #f4e6c8;
+}
+
+.rr-bowl__inside {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 0 0 104px 104px;
+}
+
+.rr-bowl__batter {
+  --level: 0%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--level);
+  background: #f5dc95;
+  transition: height 0.4s ease;
+}
+
+/* Oberfläche des Teigs – erst sichtbar, wenn die erste Zutat drin ist */
+.rr-bowl--filled .rr-bowl__batter::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -10%;
+  right: -10%;
+  height: 12px;
+  border-radius: 50%;
+  background: #f9e7ab;
+}
+
+.rr-bowl--over {
+  transform: scale(1.07);
+  box-shadow:
+    0 6px 0 rgba(59, 42, 32, 0.2),
+    0 0 0 6px rgba(240, 180, 41, 0.75);
+}
+
+.rr-bowl--plop {
+  animation: rr-plop 0.35s ease-out;
+}
+
+.rr-bowl--done {
+  animation: rr-stir 0.8s ease-in-out;
+}
+
+.rr-caption {
+  min-height: 1.5em;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-ink-soft);
+}
+
+.rr-caption--good {
+  color: var(--color-teal-dark);
+}
+
+.rr-caption--oops {
+  color: var(--color-terracotta-dark);
+}
+
+/* ---------- Regal ---------- */
+.rr-shelf {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-m);
+  background: linear-gradient(to bottom, #f2e3c4, #e6cfa3);
+  border: 3px solid #b88a55;
+  box-shadow: var(--shadow-card);
+}
+
+.rr-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  padding: 4px 0;
+  border: 0;
+  border-radius: var(--radius-s);
+  background: none;
+  font: inherit;
+  color: var(--color-ink);
+  cursor: grab;
+  touch-action: none; /* Ziehen darf die Seite nicht scrollen */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.rr-tile__art {
+  display: block;
+  width: 100%;
+  max-width: 64px;
+  aspect-ratio: 1;
+  padding: 5px;
+  border-radius: 50%;
+  background: rgba(255, 250, 240, 0.95);
+  border: 2px solid rgba(59, 42, 32, 0.22);
+  box-shadow: 0 3px 0 rgba(59, 42, 32, 0.16);
+}
+
+.rr-tile__art svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.rr-tile__label {
+  max-width: 100%;
+  padding: 0 4px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1.25;
+  text-align: center;
+}
+
+/* In die Schüssel gelegt: Platz bleibt frei, damit nichts verrutscht */
+.rr-tile--used {
+  visibility: hidden;
+}
+
+.rr-tile--dragging {
+  opacity: 0.35;
+}
+
+.rr-tile--oops {
+  animation: rr-shake 0.45s ease-out;
+}
+
+.rr-tile--oops .rr-tile__art {
+  border-color: var(--color-terracotta);
+  background: #fbdccf;
+}
+
+/* Zieh-Kopie und Flug-Kopie liegen über allem */
+.rr-ghost {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  pointer-events: none;
+  margin: 0;
+  will-change: transform;
+}
+
+.rr-ghost .rr-tile__art {
+  box-shadow: 0 10px 18px rgba(59, 42, 32, 0.35);
+}
+
+/* Hinweis: richtige Zutaten leuchten */
+.rr-shelf--hint .rr-tile[data-needed='true']:not(.rr-tile--used) .rr-tile__art {
+  border-color: var(--color-gold-dark);
+  box-shadow:
+    0 0 0 4px var(--color-gold),
+    0 0 16px 3px rgba(240, 180, 41, 0.8);
+  animation: rr-glow 0.7s ease-in-out infinite alternate;
+}
+
+@keyframes rr-plop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.06, 0.94);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes rr-stir {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  20% {
+    transform: rotate(-5deg);
+  }
+  45% {
+    transform: rotate(5deg);
+  }
+  70% {
+    transform: rotate(-3deg);
+  }
+}
+
+@keyframes rr-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-7px) rotate(-5deg);
+  }
+  40% {
+    transform: translateX(7px) rotate(5deg);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+}
+
+@keyframes rr-glow {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}

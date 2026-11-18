@@ -1,0 +1,21 @@
+{
+  "name": "lucas-farewell-adventure",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A little adventure with eight mini-games and eight personal messages, made for Lucas.",
+  "type": "module",
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "dev": "vite",
+    "dev:phone": "vite --host",
+    "check": "node scripts/check-data.mjs",
+    "build": "vite build",
+    "preview": "vite preview",
+    "preview:phone": "vite preview --host"
+  },
+  "devDependencies": {
+    "vite": "^8.3.8"
+  }
+}

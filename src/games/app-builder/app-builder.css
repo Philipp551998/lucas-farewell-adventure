@@ -1,0 +1,262 @@
+/* App-in-an-App Builder – nur Styles dieses Spiels (Präfix ab-) */
+
+/* ---------- Baukasten-Fenster ---------- */
+.ab-window {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-m);
+  border: 3px solid #4a5a70;
+  background: #fffdf8;
+  box-shadow: var(--shadow-card);
+}
+
+.ab-window__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: #4a5a70;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.ab-window__dots {
+  display: inline-flex;
+  gap: 5px;
+}
+
+.ab-window__dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #e4572e;
+}
+
+.ab-window__dots i:nth-child(2) {
+  background: #f0b429;
+}
+
+.ab-window__dots i:nth-child(3) {
+  background: #6fa86b;
+}
+
+/* ---------- Slots ---------- */
+.ab-slots {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-3);
+  list-style: none;
+}
+
+.ab-slot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 56px;
+  padding: 2px var(--space-2);
+  border: 2px dashed var(--color-line);
+  border-radius: var(--radius-s);
+  background: rgba(241, 220, 176, 0.25);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.ab-slot[data-filled='true'] {
+  border-style: solid;
+  background: transparent;
+}
+
+.ab-slot__number {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #4a5a70;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.ab-slot__empty {
+  color: var(--color-ink-soft);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.ab-slot--over {
+  border-color: var(--color-terracotta);
+  background: rgba(194, 81, 42, 0.12);
+}
+
+.ab-slot--wrong {
+  border-color: var(--color-terracotta);
+  background: #fbdccf;
+  animation: ab-shake 0.45s ease-out;
+}
+
+.ab-slot--done {
+  border-color: var(--color-teal);
+  background: #dff3ec;
+}
+
+.ab-slot--done .ab-slot__number {
+  background: var(--color-teal);
+  font-size: 0;
+}
+
+.ab-slot--done .ab-slot__number::before {
+  content: '✓';
+  font-size: 0.95rem;
+}
+
+.ab-hint {
+  animation: ab-glow 0.7s ease-in-out infinite alternate;
+}
+
+.ab-slot.ab-hint {
+  border-color: var(--color-gold-dark);
+  box-shadow: 0 0 0 4px var(--color-gold);
+}
+
+/* ---------- Karten ---------- */
+.ab-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  min-height: 52px;
+  padding: 4px var(--space-4) 4px var(--space-2);
+  border: 2px solid var(--color-line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--color-ink);
+  font: inherit;
+  font-weight: 800;
+  font-size: 1.05rem;
+  cursor: grab;
+  box-shadow: 0 3px 0 rgba(59, 42, 32, 0.14);
+  touch-action: none; /* Ziehen darf die Seite nicht scrollen */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.ab-slot .ab-card {
+  flex: 1;
+}
+
+.ab-card__icon {
+  display: block;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.ab-card__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ab-card--dragging {
+  opacity: 0.35;
+}
+
+.ab-card.ab-hint {
+  border-color: var(--color-gold-dark);
+  box-shadow:
+    0 0 0 4px var(--color-gold),
+    0 0 16px 3px rgba(240, 180, 41, 0.75);
+}
+
+.ab-ghost {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  pointer-events: none;
+  margin: 0;
+  box-shadow: 0 12px 20px rgba(59, 42, 32, 0.35);
+  will-change: transform;
+}
+
+/* ---------- Werkzeugkasten ---------- */
+.ab-toolbox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.ab-pool {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+  min-height: 52px;
+  padding: var(--space-3);
+  border-radius: var(--radius-m);
+  background: linear-gradient(to bottom, #f2e3c4, #e6cfa3);
+  border: 3px solid #b88a55;
+}
+
+.ab-pool__empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-weight: 700;
+  color: var(--color-ink-soft);
+  align-self: center;
+}
+
+.ab-caption {
+  min-height: 1.5em;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-ink-soft);
+}
+
+.ab-run {
+  width: 100%;
+}
+
+.ab-run:disabled {
+  opacity: 0.55;
+  box-shadow: 0 4px 0 rgba(159, 63, 29, 0.45);
+  cursor: default;
+}
+
+/* ---------- Mini-App läuft ---------- */
+.ab-live {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  background: #dff3ec;
+  border-top: 3px solid var(--color-teal);
+  color: var(--color-teal-dark);
+  font-weight: 800;
+  text-align: center;
+  animation: pop-in 0.3s ease-out both;
+}
+
+@keyframes ab-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
+}
+
+@keyframes ab-glow {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.03);
+  }
+}
