@@ -11,6 +11,7 @@
     "dev": "vite",
     "dev:phone": "vite --host",
     "check": "node scripts/check-data.mjs",
+    "check:build": "node scripts/check-build.mjs",
     "build": "vite build",
     "preview": "vite preview",
     "preview:phone": "vite preview --host"

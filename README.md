@@ -22,6 +22,7 @@ Danach die angezeigte Adresse (meist `http://localhost:5173`) im Browser öffnen
 | `npm run dev:phone` | Wie `dev`, aber im WLAN erreichbar – zum Testen auf dem iPhone |
 | `npm run check` | Prüft, dass Person ↔ Spiel ↔ Nachricht vollständig verbunden sind |
 | `npm run build` | Erzeugt den fertigen Build im Ordner `dist/` |
+| `npm run check:build` | Prüft den fertigen Build: Datenschutz, Unterpfad, iPhone/PWA, Service Worker, Offline-Simulation |
 | `npm run preview` | Zeigt den Build lokal an (hier ist auch der Service Worker aktiv) |
 
 Fortschritt zurücksetzen: in der App auf **Reset adventure** tippen (oder in den Browser-Entwicklertools `localStorage` leeren).
@@ -56,7 +57,8 @@ src/
                              stationArt (Illustrationen der 8 Stationen, Truhe, Spielfigur),
                              mapScene (Landschaft der Karte), confetti
   styles/                    tokens.css, base.css, components.css, screens.css
-scripts/check-data.mjs     Datenprüfung
+scripts/check-data.mjs     Datenprüfung (Person ↔ Spiel ↔ Nachricht)
+scripts/check-build.mjs    Build-Prüfung (Datenschutz, Unterpfad, iPhone/PWA, Service Worker, Offline-Simulation)
 .github/workflows/deploy.yml  Veröffentlichung auf GitHub Pages
 ```
 
@@ -115,33 +117,91 @@ Die Texte in `src/data/messages.json` sind unverändert aus der Excel-Datei erze
 
 ## Veröffentlichung (GitHub Pages)
 
-Schritt für Schritt (einmalig):
+### Was vorbereitet ist
 
-1. Lokales Repository anlegen und prüfen, dass die Excel **nicht** aufgeführt wird:
+| Anforderung | Umsetzung |
+| --- | --- |
+| Öffentlich über HTTPS | GitHub Pages liefert jede Seite automatisch über **HTTPS** aus (`https://<name>.github.io/<repo>/`). Das brauchen auch App-Installation und Service Worker. |
+| Automatischer Bau | `.github/workflows/deploy.yml`: Bei jedem Push auf `main` wird gebaut, geprüft und veröffentlicht. Schlägt ein Schritt fehl, wird **nichts** veröffentlicht. |
+| Richtiger Unterpfad | `base: './'`, Hash-Routing, relative Pfade im Manifest und im Service Worker. Läuft unter `/<repo-name>/` ohne Anpassung, **egal wie das Repository heißt**. |
+| iPhone / Home-Bildschirm | Apple-Touch-Icon 180×180 (lückenlos deckend, ohne Transparenz), Manifest mit `display: standalone`, Meta-Tags für den app-ähnlichen Start, Safe-Areas für Notch und Home-Indikator. |
+| Offline-Betrieb | Der Service Worker legt beim ersten Laden **alle** Dateien (Skripte, Styles, alle Spiele, Icons, Manifest) im Cache ab. Per Simulation geprüft (`npm run check:build`). |
+| Keine privaten Dateien | `.gitignore`, ein Wächter-Schritt im Workflow und eine Prüfung des fertigen Builds (keine Excel-/Office-/Schlüsseldateien, keine lokalen Pfade). `noindex` hält Suchmaschinen fern. |
+| Unabhängig von anderen Projekten | Eigener Ordner, eigenes Repository, einzige Abhängigkeit ist Vite. Eigene Speicher-Namen (`lucas-farewell-adventure:…`, Cache-Präfix `lucas-adventure-`). Der Service Worker löscht nur eigene Caches. |
 
-   ```bash
-   git init -b main
-   git add .
-   git status
-   ```
+Die Prüfungen laufen lokal mit `npm run check` (Daten) und `npm run check:build` (Build, nach `npm run build`) und automatisch im Workflow.
 
-   In der Liste dürfen `Lucas_Farewell_App_Handoff.xlsx`, `node_modules/` und `dist/` **nicht** stehen. `package-lock.json` dagegen muss dabei sein (die Veröffentlichung nutzt `npm ci`).
+### Schritt für Schritt (einmalig)
 
-2. Ersten Commit erstellen: `git commit -m "Lucas Farewell Adventure"`
-3. Auf GitHub ein **öffentliches** Repository anlegen (ohne README/.gitignore), das angezeigte Remote hinzufügen (`git remote add origin <URL>`) und pushen (`git push -u origin main`).
-4. Im Repository: **Settings → Pages → Source: GitHub Actions**.
-5. Der Push startet `.github/workflows/deploy.yml`: Datenprüfung, Build, Veröffentlichung. Danach ist die App unter `https://<name>.github.io/<repo>/` erreichbar (Reiter **Actions** zeigt den Fortschritt).
+**1. Lokal committen** (im Projektordner im Terminal):
 
-Spätere Änderungen: committen und pushen – die App wird automatisch neu veröffentlicht.
+```bash
+git status
+```
 
-Die App nutzt relative Pfade (`base: './'`) und Hash-Routing – sie läuft daher unter jedem Unterpfad ohne weitere Anpassung (mit einem Unterpfad-Test geprüft).
+Es dürfen weder `Lucas_Farewell_App_Handoff.xlsx` noch `node_modules/` noch `dist/` aufgeführt sein. Dann:
 
-> **Wichtig:** Die Excel-Datei `Lucas_Farewell_App_Handoff.xlsx` ist in der `.gitignore` eingetragen und darf nicht ins Repository gelangen (mit einem Test-Repository geprüft).
->
-> **Hinweis zur Überraschung:** Die Nachrichten stecken im öffentlichen Code und sind damit für jede Person mit dem Link lesbar, auch ohne die Spiele zu spielen. Den Link also erst kurz vor dem Überreichen weitergeben. Du hast der Veröffentlichung der Nachrichten mit den Beteiligten zugestimmt.
+```bash
+git add .
+git commit -m "Veröffentlichung vorbereiten"
+```
 
-## Vor dem Überreichen testen
+**2. Neues Repository auf GitHub anlegen** (im Browser, eingeloggt):
+`github.com` → **+** (oben rechts) → **New repository**.
+- *Repository name:* z. B. `lucas-farewell-adventure` (der Name wird Teil der Adresse)
+- **Public** auswählen
+- **Keine** Häkchen bei „Add a README file“, „.gitignore“ oder „license“ setzen
+- **Create repository**
 
-- Auf einem echten iPhone in Safari öffnen, **Teilen → Zum Home-Bildschirm** (PWA) und alle acht Spiele einmal spielen.
-- Offline-Betrieb: `npm run build` und `npm run preview`, im Browser öffnen, einmal neu laden, dann das Netz trennen und neu laden.
-- Fortschritt zurücksetzen: in der App **Reset adventure**.
+Es muss ein **eigenes, neues** Repository sein – nicht das Repository der Portugiesisch-Lernapp.
+
+**3. GitHub Pages aktivieren** (noch vor dem ersten Push):
+Im neuen Repository → **Settings** → links **Pages** → bei *Build and deployment* → *Source* → **GitHub Actions** wählen.
+
+**4. Verbinden und hochladen** (Terminal im Projektordner; `<DEIN-NAME>` ist dein GitHub-Benutzername):
+
+```bash
+git remote add origin https://github.com/<DEIN-NAME>/lucas-farewell-adventure.git
+```
+```bash
+git push -u origin main
+```
+
+Beim ersten Push fragt Git ggf. nach der Anmeldung bei GitHub (Browser-Fenster oder Zugangstoken).
+
+**5. Fortschritt ansehen:** Repository → Reiter **Actions** → Lauf „Deploy to GitHub Pages“. Zwei Schritte (*build*, *deploy*) werden grün. Bei Rot: den roten Schritt anklicken, die Fehlermeldung steht im Protokoll.
+
+**6. Adresse finden:** Nach dem grünen Lauf unter **Settings → Pages** („Your site is live at …“) oder im Schritt *deploy* des Actions-Laufs. Sie lautet `https://<DEIN-NAME>.github.io/lucas-farewell-adventure/`.
+
+Falls der erste Lauf fehlschlug, weil Pages noch nicht aktiviert war: Schritt 3 nachholen, dann **Actions → Deploy to GitHub Pages → Run workflow**.
+
+### Auf dem iPhone installieren
+
+1. In **Safari** (nicht Chrome) die Adresse öffnen und die Seite **vollständig laden lassen** (einmal mit Internet; danach ist alles offline verfügbar).
+2. **Teilen**-Symbol (Quadrat mit Pfeil) → **Zum Home-Bildschirm** → Namen bestätigen („Lucas Adventure“) → **Hinzufügen**.
+3. Symbol auf dem Home-Bildschirm antippen: Die App startet ohne Safari-Leisten.
+
+Gut zu wissen: Die installierte App hat einen **eigenen Speicher**. Fortschritt aus einem Safari-Tab wird dort nicht übernommen. Vor dem Überreichen deshalb in der installierten App **Reset adventure** drücken. Empfohlen: iOS 16.4 oder neuer (mindestens iOS 15.4).
+
+### Offline testen
+
+1. App einmal mit Internet öffnen.
+2. Flugmodus einschalten.
+3. App vom Home-Bildschirm starten: Karte, Spiele und Nachrichten müssen funktionieren.
+
+Am Rechner: `npm run build`, `npm run preview`, im Browser öffnen, neu laden, in den Entwicklertools unter *Application → Service Workers* „Offline“ anhaken und neu laden.
+
+### Änderungen später veröffentlichen
+
+Änderungen committen und mit `git push` hochladen – die App wird automatisch neu gebaut und veröffentlicht. Online lädt die Seite immer die neueste Version. Der neue Offline-Speicher wird aktiv, sobald die App einmal komplett geschlossen war (auf dem iPhone: im App-Umschalter wegwischen und neu öffnen).
+
+### Datenschutz und Überraschung
+
+- Die **Excel-Datei** ist in der `.gitignore`, ein Wächter-Schritt im Workflow bricht ab, falls sie je versioniert würde, und die Build-Prüfung kontrolliert den fertigen Build.
+- Die **Nachrichten** stecken im öffentlichen Code und sind für jede Person mit dem Link lesbar, auch ohne die Spiele zu spielen. Du hast der Veröffentlichung mit den Beteiligten zugestimmt. Den Link erst kurz vor dem Überreichen weitergeben.
+- `noindex` bittet Suchmaschinen, die Seite nicht aufzunehmen. Das Repository selbst ist auf GitHub öffentlich sichtbar.
+- Die Git-Identität in diesem Projekt ist `Philipp <philipp@users.noreply.github.com>` (nur lokal gesetzt), die echte E-Mail erscheint nirgends.
+
+### Unabhängigkeit von anderen Projekten
+
+Dieses Projekt teilt keinen Code, keine Dateien und keine Abhängigkeiten mit anderen Apps. Liegen mehrere Apps unter derselben `<name>.github.io`-Adresse, teilen sich Browser den Speicher pro Domain – die Namen hier sind eindeutig (`lucas-farewell-adventure:…`), und der Service Worker löscht ausschließlich Caches mit dem Präfix `lucas-adventure-`. Das ist in der Offline-Simulation mit dem Cache einer fremden App belegt.

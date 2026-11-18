@@ -1,5 +1,10 @@
-# Baut die App und veröffentlicht sie auf GitHub Pages.
-# Aktivierung im Repository: Settings → Pages → Source: "GitHub Actions".
+# Baut die App und veroeffentlicht sie ueber GitHub Pages (HTTPS).
+#
+# Einmalig im Repository: Settings -> Pages -> Build and deployment -> Source: "GitHub Actions".
+# Danach startet jeder Push auf den Branch "main" diesen Ablauf automatisch (oder manuell ueber
+# Actions -> "Deploy to GitHub Pages" -> "Run workflow").
+#
+# Schlaegt EIN Schritt fehl (Datenpruefung, Build, Build-Pruefung), wird NICHTS veroeffentlicht.
 name: Deploy to GitHub Pages
 
 on:
@@ -19,15 +24,32 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+
+      # Sicherheitsnetz: private Dateien duerfen nie im Repository liegen.
+      - name: Guard - no private files in the repository
+        run: |
+          if git ls-files | grep -Ei '\.(xlsx|xls|xlsm|xlsb|csv|docx|pptx|env|pem|key)$|handoff'; then
+            echo "::error::Eine private Datei (z. B. die Excel-Uebergabedatei) ist im Repository enthalten. Abbruch."
+            exit 1
+          fi
+          echo "Keine privaten Dateien im Repository gefunden."
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
+
       - run: npm ci
-      - run: npm run check
-      - run: npm run build
+      - name: Check data (people, games, messages)
+        run: npm run check
+      - name: Build
+        run: npm run build
+      - name: Check build (privacy, subpath, iPhone/PWA, service worker, offline)
+        run: npm run check:build
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
@@ -36,6 +58,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
